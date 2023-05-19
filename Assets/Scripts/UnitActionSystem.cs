@@ -6,7 +6,12 @@ using UnityEngine.EventSystems;
 public class UnitActionSystem : MonoBehaviour
 {
     public static UnitActionSystem Instance {get;private set;}
+
     public event EventHandler OnSelectedUnitChanged;
+    public event EventHandler OnSelectedActionChanged;
+    public event EventHandler<bool> OnBusyChanged;
+    public event EventHandler onActionStarted;
+    
     [SerializeField] private Unit selectedUnit;
     [SerializeField] private LayerMask unitLayerMask;
     private BaseAction selectedAction;
@@ -32,6 +37,10 @@ public class UnitActionSystem : MonoBehaviour
         {
             return;
         }
+        if(!TurnSystem.Instance.IsPlayerTurn())
+        {
+            return;
+        }
         if(EventSystem.current.IsPointerOverGameObject())
         {
             return;
@@ -49,11 +58,20 @@ public class UnitActionSystem : MonoBehaviour
         {
             GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
             
-            if(selectedAction.IsValidActionGridPosition(mouseGridPosition))
+            if(!selectedAction.IsValidActionGridPosition(mouseGridPosition))
             {
-                SetBusy();
-                selectedAction.TakeAction(mouseGridPosition, ClearBusy);
+                return;
             }
+
+            if (!selectedUnit.TrySpendActionPointsToTakeAction(selectedAction))
+            {
+                return;
+            }
+
+            SetBusy();
+            selectedAction.TakeAction(mouseGridPosition, ClearBusy);
+
+            onActionStarted?.Invoke(this, EventArgs.Empty);
         }
     }    
     private bool TryHandleUnitSelection()
@@ -70,6 +88,11 @@ public class UnitActionSystem : MonoBehaviour
                         // Unit is already selected
                         return false;
                     }
+                    if(unit.IsEnemy())
+                    {
+                        // Clicked on an Enemy
+                        return false;
+                    }
                     SetSelectedUnit(unit);
                     return true;
                 }
@@ -81,10 +104,12 @@ public class UnitActionSystem : MonoBehaviour
     private void SetBusy()
     {
         isBusy = true;
+        OnBusyChanged?.Invoke(this, isBusy);
     }
     private void ClearBusy()
     {
         isBusy = false;
+        OnBusyChanged?.Invoke(this, isBusy);
     }
     private void SetSelectedUnit(Unit unit)
     {
@@ -95,6 +120,8 @@ public class UnitActionSystem : MonoBehaviour
     public void SetSelectedAction(BaseAction baseAction)
     {
         selectedAction = baseAction;
+        OnSelectedActionChanged?.Invoke(this, EventArgs.Empty);
+
     }
     public Unit GetSelectedUnit()
     {
