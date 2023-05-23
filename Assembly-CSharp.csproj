@@ -76,6 +76,7 @@
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\MouseWorld.cs" />
     <Compile Include="Assets\Scripts\LookAtCamera.cs" />
+    <Compile Include="Assets\Scripts\PathfindingGridDebugObject.cs" />
     <Compile Include="Assets\Scripts\TurnSystem.cs" />
     <Compile Include="Assets\Scripts\Grid\GridPosition.cs" />
     <Compile Include="Assets\Scripts\UnitManager.cs" />
@@ -83,16 +84,15 @@
     <Compile Include="Assets\Scripts\Unit.cs" />
     <Compile Include="Assets\Scripts\CameraManager.cs" />
     <Compile Include="Assets\Scripts\Actions\ShootAction.cs" />
+    <Compile Include="Assets\Scripts\Pathfinding.cs" />
     <Compile Include="Assets\Scripts\Actions\MoveAction.cs" />
     <Compile Include="Assets\Scripts\Actions\SpinAction.cs" />
     <Compile Include="Assets\Scripts\EnemyAIAction.cs" />
+    <Compile Include="Assets\Scripts\PathNode.cs" />
     <Compile Include="Assets\Scripts\Grid\GridObject.cs" />
     <Compile Include="Assets\Scripts\EnemyAI.cs" />
     <Compile Include="Assets\Scripts\BulletProjectile.cs" />
     <Compile Include="Assets\Scripts\UI\UnitWorldUI.cs" />
-    <Compile Include="Assets\Scripts\Pathfinding.cs" />
-    <Compile Include="Assets\Scripts\PathNode.cs" />
-    <Compile Include="Assets\Scripts\PathfindingGridDebugObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
